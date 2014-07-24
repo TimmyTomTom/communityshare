@@ -11,6 +11,7 @@ from community_share.authorization import get_requesting_user
 from community_share import mail_actions
 from community_share.routes import base_routes
 from community_share import config, store
+from community_share.models.base import ValidationException
 
 logger = logging.getLogger(__name__)
 
@@ -41,23 +42,26 @@ def register_user_routes(app):
             response = base_routes.make_bad_request_response(
                 'A password was not specified.');
         else:
-            user = User.admin_deserialize_add(user)
-            error_messages = user.set_password(password)
-            if error_messages:
-                error_message = ', '.join(error_messages)
-                response = base_routes.make_bad_request_response(error_message)
-            else:
-                store.session.add(user)
-                store.session.commit()
-                error_message = mail_actions.request_signup_email_confirmation(user)
-                secret = user.make_api_key()
-                serialized = user.serialize(user)
-                response_data = {
-                    'data': serialized,
-                    'apiKey': secret.key,
-                    'warningMessage': 'Failed to send email confirmation: {0}'.format(error_message)
-                }
+            try:
+                user = User.admin_deserialize_add(user)
+                error_messages = user.set_password(password)
+                if error_messages:
+                    error_message = ', '.join(error_messages)
+                    response = base_routes.make_bad_request_response(error_message)
+                else:
+                    store.session.add(user)
+                    store.session.commit()
+                    error_message = mail_actions.request_signup_email_confirmation(user)
+                    secret = user.make_api_key()
+                    serialized = user.serialize(user)
+                    response_data = {
+                        'data': serialized,
+                        'apiKey': secret.key,
+                        'warningMessage': 'Failed to send email confirmation: {0}'.format(error_message)
+                    }
                 response = jsonify(response_data)
+            except ValidationException as e:
+                response = base_routes.make_bad_request_response(str(e))
         return response
 
     @app.route('/api/userbyemail/<string:email>', methods=['GET'])

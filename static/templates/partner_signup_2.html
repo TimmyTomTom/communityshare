@@ -1,71 +1,124 @@
-
 <div cs-main-view has-permission="{{(!(Session.activeUser === undefined))}}">
   <div class="row">
-
+    
     <div class="col-sm-2 col-md-3">
-<!--       <img style="img-responsive" src="http://i.imgur.com/j9NMHah.png">
-      <img src="http://i.imgur.com/j9NMHah.png"> -->
-  </div>
-
+      <!--       <img style="img-responsive" src="http://i.imgur.com/j9NMHah.png">
+                 <img src="http://i.imgur.com/j9NMHah.png"> -->
+    </div>
+    
     <div class="col-sm-10 col-md-9">
       <div class="panel panel-default">
         <div class="gradient-header">
           <h1>Welcome to CommunityShare</h1>
         </div>
         <div class="row">
+          
+          <div class="panel-body">
+            <h2 class="text-center">Personal Information</h2>
+            <form novalidate name="personalSettingsForm">
 
+              <div class="col-sm-3 text-center">
+                <!-- FIXME: Remove imgur logo.  Put somewhere static.  Check copyright. -->
+                <img ng-show="(uploader.queue.length == 0) && (!user.picture_url)" 
+                     src="http://imgur.com/rQ7NKxD.png" class="img-responsive img-circle"></img>
+                <image ng-show="(uploader.queue.length === 0)" ng-src="{{user.picture_url}}" height="100"
+                       class="img-responsive img-circle"/>
+                <div ng-show="uploader.isHTML5">
+                  <div ng-repeat="item in uploader.queue"
+                       ng-thumb="{ file: item.file, height: 150}"></div>
+                </div>
+                <input ng-file-select type="file" name="picture" id="picture"/>
+                <div ng-show="!validImage">Not a valid image file</div>
+                <!--<button ng-file-select type="file"
+                        name="picture" id="picture"
+                        class="btn btn-primary signup-btn">Upload</button>-->
+              </div>
+            
+            <div class="col-sm-9">
+              <h3>About Me</h3>
+              <p class="text-muted">
+                100 Words or less
+              </p>
+              <div class="form-group">
 
-        <div class="panel-body">
-          <h2 class="text-center">Personal Information</h2>
+                <textarea ng-model="user.bio"
+                          name="bio"
+                          required
+                          placeholder="What is your history?"
+                          rows="5"
+                          class="form-control">
+                </textarea>
+                <p ng-show="personalSettingsForm.bio.$invalid" class="help-block">
+                  This field is required.
+                </p>
 
-        <div class="col-sm-3 text-center">
+                <input ng-model="user.zipcode"
+                       name="zipcode"
+                       id="zipcode"
+                       required
+                       class="form-control org-input required"
+                       placeholder="Zip Code"
+                       ng-pattern="/^\d{5}(-\d{4})?$/"
+                       type="text"/>
+                <p ng-show="personalSettingsForm.zipcode.$invalid && !personalSettingsForm.zipcode.$pristine"
+                   class="help-block">
+                  Please enter a valid ZIP code.
+                </p>
 
-          <img src="http://imgur.com/rQ7NKxD.png" class="img-responsive img-circle"></img>
+                <input ng-model="user.phonenumber"
+                       name="phonenumber"
+                       id="phonenumber"
+                       class="form-control org-input required"
+                       placeholder="Phone Number"
+                       ng-pattern="/^\d{3}-?\d{3}-?\d{4}?$/"
+                       type="text"/>
+                <p ng-show="personalSettingsForm.phonenumber.$invalid && !personalSettingsForm.phonenumber.$pristine"
+                   class="help-block">
+                  Please enter a valid phone number (xxx-xxx-xxxx)
+                </p>
 
-          <button class="btn btn-primary signup-btn">Upload</button>
+                <input class="form-control org-input required"
+                       placeholder="Website URL"
+                       type="text"
+                       id="website"
+                       name="website"
+                       ng-model="user.website"
+                       />
 
+                <input class="form-control org-input required"
+                       placeholder="Twitter Handle"
+                       ng-model="user.twitter_handle"
+                       />
+                
+                <input class="form-control org-input required"
+                       placeholder="LinkedIn Profile URL"
+                       ng-model="user.linkedin_link"
+                       />
+              </div>
+              
+              <label class="checkbox-inline">
+                <input type="checkbox" value="1"> CommunityShare invites you to stay informed about our progress in connecting educators and community members and adding new features to the CommunityShare site through periodic email updates. Click here to opt-out now or at any time by visiting your profile. You will still receive emails in relation to your correspondence with community partners/educators.
+              </label>
+              
+            </div>
+            </form>
+          </div>
         </div>
-
-        <div class="col-sm-9">
-          <h3>About Me</h3>
-          <p class="text-muted">
-            100 Words or less
-          </p>
-          <div class="form-group">
-          <textarea class="form-control" rows="5" placeholder="What is your history? "></textarea>
-          <input class="form-control org-input required" placeholder="Zip Code"></input>
-          <input class="form-control org-input required" placeholder="Phone Number"></input>
-          <input class="form-control org-input required" placeholder="Website URL"></input>
-          <input class="form-control org-input required" placeholder="Twitter Profile URL"></input>
-          <input class="form-control org-input required" placeholder="LinkedIn Profile URL"></input>
-
-
+        
+        <div class="row">
+          <div class="signup-bottom">
+            <div class="pull-right">
+              <button class="btn btn-primary"
+                      ng-click="submit()"
+                      >Next</button>
+            </div>
+            <div class="pull-left">
+              <a href="#">Previous</a>
+            </div>
+          </div>
         </div>
-
-          <label class="checkbox-inline">
-          <input type="checkbox" value="1"> CommunityShare invites you to stay informed about our progress in connecting educators and community members and adding new features to the CommunityShare site through periodic email updates. Click here to opt-out now or at any time by visiting your profile. You will still receive emails in relation to your correspondence with community partners/educators.
-
-          </label>
-
-
-        </div>
-
+        
+      </div>
+    </div>
   </div>
-</div>
-
-<div class="row">
-
-  <div class="signup-bottom">
-
-  <div class="pull-right">
-    <button class="btn btn-primary">Next</button>
-  </div>
-
-  <div class="pull-left">
-    <a href="#">Previous</a>
-  </div>
-
-
-</div>
-
 </div>

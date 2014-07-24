@@ -67,10 +67,11 @@
 
   // User Signups
 
-  var commonSignupLogic = function($scope, Session, Messages, User, signUp,
-                                   $location, $q, Question, Answer) {
+  var commonSignupLogic = function($scope, Session, Messages, $location,
+                                   $q, Question, Answer) {
     $scope.Session = Session;
-    $scope.editedUser = new User();
+    var user = Session.activeUser;
+    $scope.user = user;
     $scope.newSearch.makeLabelDisplay();
 
     // Get questions to display during signup.
@@ -87,34 +88,27 @@
         }
       });
 
-    // passwordMethods hooks up the password matching directives.
-    $scope.passwordMethods = {};
-
     $scope.submit = function() {
-      var userPromise = signUp($scope.editedUser, $scope.editedUser.password);
-      userPromise.then(
-        function(user) {
-          // After use is created save the passive search.
-          $scope.newSearch.processLabelDisplay();
-          $scope.newSearch.searcher_user_id = user.id;
-          $scope.newSearch.zipcode = user.zipcode;
-          var searchPromise = $scope.newSearch.save();
-          var allPromises = [searchPromise];
-          // And save the answers to questions.
-          for (var i=0; i<$scope.questions.length; i++) {
-            var question = $scope.questions[i];
-            if (question.answer.text) {
-              allPromises.push(question.answer.save());
-            }
-          }
-          $q.all(allPromises).then(
-            function(data) {
-              var search = data[0];
-              $location.path('/search/' + search.id + '/results');
-            },
-            function(message) {
-              Messages.error(message);
-            });
+      // Save changes made to user.
+      var userPromise = user.save();
+      var allPromises = [userPromise];
+      // Save the passive search.
+      $scope.newSearch.processLabelDisplay();
+      $scope.newSearch.searcher_user_id = user.id;
+      $scope.newSearch.zipcode = user.zipcode;
+      var searchPromise = $scope.newSearch.save();
+      allPromises.push(searchPromise);
+      // And save the answers to questions.
+      for (var i=0; i<$scope.questions.length; i++) {
+        var question = $scope.questions[i];
+        if (question.answer.text) {
+          allPromises.push(question.answer.save());
+        }
+      }
+      $q.all(allPromises).then(
+        function(data) {
+          var search = data[0];
+          $location.path('/signup/personal');
         },
         function(message) {
           Messages.error(message);
@@ -124,7 +118,7 @@
 
   module.controller(
     'SignupCommunityPartnerController',
-    function($scope, Session, Messages, User, signUp, $location, $q, Search,
+    function($scope, Session, Messages, $location, $q, Search,
             Question, Answer) {
       $scope.isCommunityPartner = true;
       $scope.newSearch = new Search({
@@ -138,10 +132,41 @@
           distance: undefined
         });
       // Signup logic common to Community Partners and Educators
-      commonSignupLogic($scope, Session, Messages, User, signUp, $location, $q,
+      commonSignupLogic($scope, Session, Messages, $location, $q,
                        Question, Answer);
     });
   
+  module.controller(
+    'SignupPersonalController',
+    function($scope, Session, $fileUploader, $http) {
+      $scope.Session = Session;
+      $scope.user = Session.activeUser;
+      $scope.submit = function() {
+        var userPromise = $scope.user.save();
+      };
+      $scope.validImage = true;
+      var uploader = $scope.uploader = $fileUploader.create({
+        scope: $scope,
+        url: '/api/user/'+$scope.user.id+'/picture',
+        headers: $http.defaults.headers.common,
+        filters: [
+          function (item) {
+            var is_image = (item.type.substring(0, 5) == 'image');
+            $scope.validImage = is_image;
+            uploader.queue.splice(0, uploader.queue.length);
+            return is_image;
+          }
+        ]
+      });
+
+      // Make sure we only have one file in the uploader queue
+      uploader.bind('afteraddingfile', function (event, item) {
+        if (uploader.queue.length > 1) {
+          uploader.queue.splice(0, uploader.queue.length-1);
+        }
+      });
+    });
+
   module.controller(
     'SignupEducatorController',
     function($scope, Session, Messages, User, signUp, $location, $q, Search,

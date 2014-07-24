@@ -19,20 +19,11 @@
     function($q, $http, User, Authenticator, Session, Messages) {
       var signUp = function(user, password) {
         var deferred = $q.defer();
-        // Remove any insitutions with no names
-        var filteredInstitutionAssociations = [];
-        for (var i=0; i<user.institution_associations.length; i++) {
-          var institution_association = user.institution_associations[i];
-          if (institution_association.institution && institution_association.institution.name) {
-            filteredInstitutionAssociations.push(institution_association);
-          }
-          user.institution_associations = filteredInstitutionAssociations;
-        }
         var dataPromise = $http({
           method: 'POST',
           url: '/api/usersignup',
           data: {
-            'user': user,
+            'user': user.toData(),
             'password': password
           }});
         Session.clearUser();
@@ -62,6 +53,11 @@
     'UserBase',
     function(itemFactory) {
       var UserBase = itemFactory('user');
+      UserBase.prototype.toData = function() {
+        this.cleanInstitutionAssociations();
+        var data = JSON.parse(JSON.stringify(this));
+        return data;
+      };
       return UserBase;
     });
 
@@ -86,6 +82,18 @@
   module.factory(
     'User',
     function(UserBase, $q, $http, Search, Conversation, SessionBase, Evnt) {
+
+      UserBase.prototype.cleanInstitutionAssociations = function() {
+        // Remove any insitutions with no names
+        var filteredInstitutionAssociations = [];
+        for (var i=0; i<this.institution_associations.length; i++) {
+          var institution_association = this.institution_associations[i];
+          if (institution_association.institution && institution_association.institution.name) {
+            filteredInstitutionAssociations.push(institution_association);
+          }
+          this.institution_associations = filteredInstitutionAssociations;
+        }
+      };
 
       UserBase.prototype.addInstitutionAssociationRemoveMethod = function(ia) {
         var _this = this;

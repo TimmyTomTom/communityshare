@@ -2,32 +2,45 @@ from community_share.models.survey import Question, SuggestedAnswer
 
 def get_questions(creator):
     questions = [
+        
         Question(
-            text='To what extent have you worked with educators/educational institutions before?',
+            text='What types of organizations have you volunteered with in the past?',
             creator=creator,
             question_type='signup_community_partner',
             public=True,
             only_suggested_answers=False,
-            order=0,
+            order = 0,
             suggested_answers=[
                 SuggestedAnswer(creator=creator,
-                                text='Never'),
+                                text='Schools'),
                 SuggestedAnswer(creator=creator,
-                                text='A few times'),
+                                text='Nonprofits'),
                 SuggestedAnswer(creator=creator,
-                                text='6+ times'),
-                SuggestedAnswer(creator=creator,
-                                text='Dozens'),
+                                text='I have no previous volunteer experience'),
             ]
         ),
+
         Question(
-            text='If you have worked with educators/educational institutions before, please list them here.',
+            text='How often do you volunteer?',
             creator=creator,
             question_type='signup_community_partner',
             public=True,
             only_suggested_answers=False,
-            order=1,
+            order = 0,
+            suggested_answers=[
+                SuggestedAnswer(creator=creator,
+                                text="I don't"),
+                SuggestedAnswer(creator=creator,
+                                text='Once a year'),
+                SuggestedAnswer(creator=creator,
+                                text='Once a month'),
+                SuggestedAnswer(creator=creator,
+                                text='Once a week'),
+                SuggestedAnswer(creator=creator,
+                                text='Every day'),
+            ]
         ),
+
         Question(
             text='To what extent have you worked with community experts before?',
             creator=creator,

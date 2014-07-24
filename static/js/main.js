@@ -28,6 +28,10 @@
       }
     });
 
+    $routeProvider.when('/signup/choice', {
+      templateUrl: './static/templates/choose_user_type.html'
+    });
+
     $routeProvider.when('/login', {
       templateUrl: './static/templates/login.html',
       controller: 'LoginController'
@@ -39,8 +43,13 @@
     });
 
     $routeProvider.when('/signup/communitypartner', {
-      templateUrl: './static/templates/signup_community_partner.html',
+      templateUrl: './static/templates/partner_signup_1.html',
       controller: 'SignupCommunityPartnerController'
+    });
+
+    $routeProvider.when('/signup/personal', {
+      templateUrl: './static/templates/partner_signup_2.html',
+      controller: 'SignupPersonalController'
     });
 
     $routeProvider.when('/signup/educator', {

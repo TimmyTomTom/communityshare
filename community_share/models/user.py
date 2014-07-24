@@ -23,7 +23,7 @@ class User(Base, Serializable):
     MANDATORY_FIELDS = ['name', 'email']
     WRITEABLE_FIELDS = ['name', 'is_administrator', 'institution_associations',
                         'zipcode', 'website', 'twitter_handle', 'linkedin_link',
-                        'year_of_birth', 'gender', 'ethnicity', 'bio']
+                        'year_of_birth', 'gender', 'ethnicity', 'bio', 'phonenumber']
     STANDARD_READABLE_FIELDS = [
         'id', 'name', 'is_administrator', 'last_active', 'is_educator',
         'is_community_partner', 'institution_associations',
@@ -35,7 +35,7 @@ class User(Base, Serializable):
         'id', 'name', 'email' , 'date_created', 'last_active',
         'is_administrator', 'is_educator', 'is_community_partner',
         'institution_associations',
-        'zipcode', 'website', 'twitter_handle', 'linkedin_link',
+        'zipcode', 'phonenumber', 'website', 'twitter_handle', 'linkedin_link',
         'year_of_birth', 'gender', 'ethnicity', 'bio', 'picture_url',
         'email_confirmed', 'active'
     ]
@@ -60,6 +60,7 @@ class User(Base, Serializable):
     picture_filename = Column(String(100))
     bio = Column(String(1000))
     zipcode = Column(String(50))
+    phonenumber = Column(String(50))
     website = Column(String(100))
     twitter_handle = Column(String(100))
     linkedin_link = Column(String(100))

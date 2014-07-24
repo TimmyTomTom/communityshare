@@ -16,6 +16,12 @@
          },
          templateUrl: './static/templates/institution_adder.html',
          controller: function($scope) {
+           $scope.updateInstitutions = function() {
+             if ($scope.noInstitutions) {
+               $scope.user.institution_associations = [];
+               $scope.user.addNewInstitutionAssociation();
+             }
+           };
            // FIXME: Not scaleable.  Change to get the most popular.
            var institutionsPromise = Institution.get_many();
            var institutionTypes = [];
@@ -24,7 +30,9 @@
                             };
            if ($scope.isCommunityPartner) {
              $scope.options.institutionTypes = [
-               'Company', 'University', 'School'];
+               'Corporation', 'Freelancer', 'Nonprofit', 'Academic',
+               'Government', 'Other'
+               ];
            } else if ($scope.isEducator) {
              $scope.options.institutionTypes = [
                'University', 'Public School', 'Charter School', 'Private School'];
@@ -48,10 +56,11 @@
           institutionAssociation: '=',
           institutions: '=',
           institutionTypes: '=',
+          disabled: '=',
           methods: '=',
           index: '@'
         },
-        templateUrl: 'static/templates/institution_association.html'
+        templateUrl: 'static/templates/institution_association.html',
       };
     });
   

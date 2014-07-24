@@ -10,7 +10,7 @@ from community_share.models.survey import Question, SuggestedAnswer
 from community_share.models.conversation import Conversation, Message
 from community_share.models.institution import InstitutionAssociation, Institution
 from community_share.models.share import Share, Event, EventReminder
-from community_share import store, Base, config
+from community_share import store, Base, config, setup_data
 
 logger = logging.getLogger(__name__)
 
@@ -40,11 +40,10 @@ labels = {
         'Performing Arts',
     ],
     'LevelOfEngagement': [
-        'Guest Speaker', 'Field Trip Host', 'Student Competition Judget',
-        'Individual Mentor', 'Small Group Mentor', 'Curriculuum Development',
-        'Career Day Participant', 'Classroom Materials Provider',
-        'Short-term', 'Long-term'
-    ]
+        'Guest', 'Speaker', 'Field Trip Host', 'Student Competition Judge',
+        'Individual/Group Mentor', 'Share Curriculum Ideas', 'Curriculuum Development',
+        'Career Day Participant', 'Collaborator on a Class Project'
+    ],
 }
 
 def get_labels():
@@ -232,7 +231,7 @@ def setup(n_random_users=100):
     make_labels()
     import os
     from community_share.models.secret import Secret
-    admin_emails = os.environ.get('COMMUNITYSHARE_ADMIN_EMAILS', '').split(',')
+    admin_emails = config.ADMIN_EMAIL_ADDRESSES.split(',')
     admin_emails = [x.strip() for x in admin_emails]
     logger.info('admin_emails is {0}'.format(admin_emails))
     logger.info('Making Admin Users')
@@ -245,10 +244,14 @@ def setup(n_random_users=100):
     for i in range(n_random_users):
         make_random_user()
     store.session.commit()
+    creator = get_creator()
+    questions = setup_data.get_questions(creator)
+    update_questions(questions)
+    store.session.commit()
     
 if __name__ == '__main__':
     logger.info('Loading settings from environment')    
     config.load_from_environment()
     logger.info('Finished loading settings')
-    setup(n_random_users=100)
+    setup(n_random_users=10)
               

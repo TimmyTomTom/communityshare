@@ -1,13 +1,19 @@
 <div>
 
   <div ng-repeat="ia in user.institution_associations" cs-institution-association-edit
-       class="institution-group"
        institution-association="ia", index="{{$index+1}}"
        institutions="options.institutions"
+       disabled="noInstitutions"
        institution-types="options.institutionTypes">
   </div>
-
-  <a ng-click="user.addNewInstitutionAssociation()" class="cs-form-button">
-    Add another institution</a>
+  
+  <label class="checkbox-inline"
+         ng-click="updateInstitutions()">
+    <input type="checkbox" id="noInstitutions" ng-model="noInstitutions">
+    <p class="text-muted">Not Associated with an Organization.</p>
+  </label>
+  
+  <a class="pull-right" ng-click="user.addNewInstitutionAssociation();">
+    + Add Organization Association</a>
 
 </div>

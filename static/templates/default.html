@@ -1,58 +1,255 @@
-<div class="row">
-<div class="col-sm-6">
-  <h1>Share with Communityshare</h1>
-  <h3>This is the value proposition. Join today.</h3>
+<!-- This is the main splash page -->
+<div class="row" ng-show="pg === 'default'">
+  <div class="col-sm-6">
+    <h1>Share with Communityshare</h1>
+    <h3>This is the value proposition. Join today.</h3>
+  </div>
+  
+  <div class="col-sm-6 well">
+    <form role="form" name="signUpForm">
+      
+      <div class="form-group">
+        <input ng-model="newUser.firstName"
+               required
+               type="text"
+               name="firstName"
+               id="firstName"
+               placeholder="First Name"
+               class="form-control"/>
+        <p ng-show="signUpForm.firstName.$invalid && !signUpForm.firstName.$pristine"
+           class="help-block">
+          First Name is required.
+        </p>
+      </div>
 
+      <div class="form-group">
+        <input ng-model="newUser.lastName"
+               required
+               type="text"
+               name="lastName"
+               id="lastName"
+               placeholder="Last Name"
+               class="form-control"/>
+        <p ng-show="signUpForm.lastName.$invalid && !signUpForm.lastName.$pristine"
+           class="help-block">
+          Last Name is required.
+        </p>
+      </div>
+
+      <div class="form-group">
+        <input ng-model="newUser.email"
+               required
+               name="email"
+               id="email"
+               placeholder="Email"
+               class="form-control"
+               type="email"/>
+        <p ng-show="signUpForm.email.$invalid && !signUpForm.email.$pristine" class="help-block">
+          Please enter a valid email.
+        </p>
+      </div>
+
+      <div class="form-group">
+        <input ng-model="newUser.password"
+               required
+               name="password"
+               id="password"
+               class="form-control"
+               placeholder="Password"
+               cs-parser-hook="passwordConnection"
+               ng-minlength="8"
+               methods="passwordMethods"
+               type="password"/>
+        <p ng-show="signUpForm.password.$error.required && !signUpForm.password.$pristine"
+           class="help-block">
+          A password is required.
+        </p>
+        <p ng-show="signUpForm.password.$error.minlength && !signUpForm.password.$pristine"
+           class="help-block">
+          Password is less than 8 characters.
+        </p>
+      </div>
+
+      <div class="form-group">
+        <input ng-model="repeat_password"
+               name="repeat_password"
+               id="repeat_password"
+               class="form-control"
+               cs-match="passwordConnection"
+               methods="passwordMethods"
+               placeholder="Confirm Password"
+               type="password"/>
+        <p ng-show="signUpForm.repeat_password.$error.match && !signUpForm.repeat_password.$pristine" class="help-block">
+          Passwords do not match.
+        </p>
+      </div>
+      
+      <div class="col-xs-6">
+        <label class="radio inline">
+          <input type="radio" name="inLineRadioOptions"
+                 ng-model="user_type"
+                 class="signupRadio" value="communityPartner">
+          Community Partner
+        </label>
+      </div>
+      <div class="col-xs-6">
+        <label class="radio inline">
+          <input type="radio" name="inLineRadioOptions"
+                 ng-model="user_type"
+                 class="signupRadio" value="educator">
+          Educator
+        </label>
+      </div>
+      
+      <p> By clicking Sign Up, you agree to our <a href="#">Terms of Service</a>.</p>
+
+      <div alert alert-error ng-show="errorMessage">{{errorMessage}}</div>
+      
+      <div class="col-xs-12 text-center">
+        <button type="submit" class="btn btn-primary text-center"
+                ng-disabled="signUpForm.$invalid || (user_type === undefined)"
+                ng-click="completeSplash()">
+          Sign Up
+        </button>
+      </div>
+    </form>
+  </div>
 </div>
 
-<div class="row">
-<div class="col-sm-6 well">
-  <form role="form">
+<!-- This is the first page of the community share signup process -->
+<div class="row" ng-show="pg === 'partner1'">
+  
+  <div class="col-sm-2 col-md-3">
+    <!--       <img style="img-responsive" src="http://i.imgur.com/j9NMHah.png">
+               <img src="http://i.imgur.com/j9NMHah.png"> -->
+  </div>
+  
+  <div class="col-sm-10 col-md-9">
+    <div class="panel panel-default">
+      <div class="gradient-header">
+        <h1>Welcome to CommunityShare</h1>
+      </div>
 
-    <div class="form-group">
-      <input type="name" class="form-control" id="firstName" placeholder="First Name">
+      <div class="panel-body">
+        <h2 class="text-center">Organization Information</h2>
+        <div class="col-md-9 col-md-offset-2">
+          <div cs-institutions user="newUser" is-community-partner="true">
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6">
+            <label for="frequency">How often do you bring community members into the classroom</label>
+            <select class="form-control">
+              <option value="" disabled selected></option>
+              <option>Frequently</option>
+              <option>Often</option>
+              <option>Occasionally</option>
+              <option>Rarely</option>
+              <option>Never</option>
+            </select>
+          </div>
+          <div class="col-md-6">
+            <label for="frequency">What types of organizations have you volunteered with in the past?</label>
+            <select class="form-control">
+              <option value="" disabled selected></option>
+              <option>Schools</option>
+              <option>Nonprofits</option>
+              <option>Other (Fill in the blank)</option>
+              <option>I have no previous volunteer experience</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="col-xs-12">
+          <h3>I am interested in working with the following groups</h3>
+          <div class="btn-group">
+            <button class="btn btn-sm light-yellow-button search-btn">k-5</button>
+            <button class="btn btn-sm light-yellow-button search-btn">6-8</button>
+            <button class="btn btn-sm light-yellow-button search-btn">9-12</button>
+            <button class="btn btn-sm light-yellow-button search-btn">College</button>
+            <button class="btn btn-sm light-yellow-button search-btn">Adult</button>
+          </div>
+          <h3>I am interested in the following types of engagement (check all that apply)</h3>
+          <div class="btn-group">
+            <button class="btn btn-sm light-blue-button search-btn">Guest Speaker</button>
+            <button class="btn btn-sm light-blue-button search-btn">Field Trip Host</button>
+            <button class="btn btn-sm light-blue-button search-btn">Student Competition Judge</button>
+            <button class="btn btn-sm light-blue-button search-btn">Individual/Group Mentor</button>
+            <button class="btn btn-sm light-blue-button search-btn">Share Curriculum Ideas</button>
+            <button class="btn btn-sm light-blue-button search-btn">Curriculuum Development</button>
+            <button class="btn btn-sm light-blue-button search-btn">Career Day Participant</button>
+            <button class="btn btn-sm light-blue-button search-btn">Collaborator on a Class Project</button>
+          </div>
+        </div>
+
+      </div>
     </div>
 
-    <div class="form-group">
-      <input type="name" class="form-control" id="lastName" placeholder="Last Name">
+    <div class="row">
+      <div class="signup-bottom">
+        <div class="pull-right">
+          <button class="btn btn-primary"
+                  ng-click="pg = 'partner2';">
+            Next</button>
+        </div>
+      </div>
     </div>
-
-    <div class="form-group">
-      <input type="email" class="form-control" id="email" placeholder="Email">
-    </div>
-
-    <div class="form-group">
-      <input type="password" class="form-control" id="password" placeholder="Password">
-    </div>
-
-    <div class="form-group">
-      <input type="confimr-password" class="form-control" id="confirmPassword" placeholder="Confirm Password">
-    </div>
-
-
-<div class="col-xs-6">
-    <label class="radio inline">
-      <input type="radio" name="inLineRadioOptions" class="signupRadio" value="communityPartner">Community Partner
-    </label>
   </div>
 
-
-<div class="col-xs-6">
-    <label class="radio inline">
-      <input type="radio" name="inLineRadioOptions" class="signupRadio" value="educator">Educator
-    </label>
 </div>
 
-<p> By clicking Sign Up, you agree to our <a href="#">Terms of Service</a>.</p>
-
-<div class="col-xs-12 text-center">
-<button type="submit" class="btn btn-primary text-center">Sign Up</button>
-</div>
+<!-- This is the second page of the community share partner signup process -->
+<div class="row" ng-show="pg == 'partner2'">
+  <div class="col-sm-2 col-md-3">
+    <!--       <img style="img-responsive" src="http://i.imgur.com/j9NMHah.png">
+               <img src="http://i.imgur.com/j9NMHah.png"> -->
+  </div>
+  
+  <div class="col-sm-10 col-md-9">
+    <div class="panel panel-default">
+      <div class="gradient-header">
+        <h1>Welcome to CommunityShare</h1>
+      </div>
+      <div class="panel-body">
+        <h2 class="text-center">Personal Information</h2>
+        <div class="col-sm-3 text-center">
+          <img src="http://imgur.com/rQ7NKxD.png" class="img-responsive img-circle"></img>
+          <button class="btn btn-primary signup-btn">Upload</button>
+        </div>
+        
+        <div class="col-sm-9">
+          <h3>About Me</h3>
+          <p class="text-muted">
+            100 Words or less
+          </p>
+          <div class="form-group">
+            <textarea class="form-control" rows="5" placeholder="What is your history? "></textarea>
+            <input class="form-control org-input required" placeholder="Zip Code"></input>
+            <input class="form-control org-input required" placeholder="Phone Number"></input>
+            <input class="form-control org-input required" placeholder="Website URL"></input>
+            <input class="form-control org-input required" placeholder="Twitter Profile URL"></input>
+            <input class="form-control org-input required" placeholder="LinkedIn Profile URL"></input>
+          </div>
+          
+          <label class="checkbox-inline">
+            <input type="checkbox" value="1"> CommunityShare invites you to stay informed about our progress in connecting educators and community members and adding new features to the CommunityShare site through periodic email updates. Click here to opt-out now or at any time by visiting your profile. You will still receive emails in relation to your correspondence with community partners/educators.
+            
+          </label>
+          
+        </div>
+      </div>
     </div>
+    
+    <div class="row">
+      <div class="signup-bottom">
+        <div class="pull-right">
+          <button class="btn btn-primary">Next</button>
+        </div>
+        <div class="pull-left">
+          <a ng-click="pg='partner1'">Previous</a>
+        </div>
+      </div>
     </div>
-
-  </form>
-
-</div>
-</div>
+  </div>
 </div>

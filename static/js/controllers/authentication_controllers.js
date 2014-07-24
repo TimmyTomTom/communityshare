@@ -84,10 +84,40 @@
 
   module.controller(
     'DefaultController',
-    function($scope, user, $location) {
+    function($scope, user, $location, User, signUp, Messages) {
       if (user) {
-        $location.path('home');
+        if (!(user.isCommunityPartner || user.isEducator)) {
+          $location.path('signup/choice');
+        } else {
+          $location.path('home');
+        }
       }
+      $scope.newUser = new User();
+      $scope.passwordMethods = {};
+      $scope.pg = 'default';
+      $scope.completeSplash = function() {
+        $scope.newUser.name = $scope.newUser.firstName + ' ' + $scope.newUser.lastName;
+        var userPromise = signUp($scope.newUser, $scope.newUser.password);
+        userPromise.then(
+          function() {
+            $scope.errorMessage = '';
+            if ($scope.user_type == 'communityPartner') {
+              $location.path('/signup/communitypartner');
+            } else if ($scope.user_type == 'educator') {
+              $location.path('/signup/educator');
+            }
+          },
+          function(message) {
+            $scope.errorMessage = message;
+          });
+/*        if ($scope.user_type == 'communityPartner') {
+          $scope.pg = 'partner1';
+          $scope.isCommunityPartner = true;
+        } else if ($scope.user_type == 'educator') {
+          $scope.pg = 'educator1';
+          $scope.isEducator = true;
+        }*/
+      };
     });
 
   module.controller(
