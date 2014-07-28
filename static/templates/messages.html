@@ -1,0 +1,29 @@
+<h4>Messages</h4>
+
+<div ng-show="conversations.length == 0">
+  You have no messages.
+</div>
+
+<div class="alert alert-danger" ng-show="errorMessage">
+  {{errorMessage}}
+</div>
+
+<div class="alert alert-info" ng-show="infoMessage">
+  {{infoMessage}}
+</div>
+
+<div ng-repeat="conversation in conversations">
+  <div class="row clickable" ng-click="showConversation(conversation.id)">
+    <div class="col-lg-2">
+      <img ng-src="{{conversation.otherUser.picture_url}}" class=" img-circle">
+    </div>
+    <div class="col-lg-10">
+      <h4>{{conversation.otherUser.name}}</h4>
+      <span ng-repeat="ia in conversation.otherUser.institution_associations">
+        {{ia.role}} / {{ia.institution.name}}
+      </span><br/>
+      <p>{{conversation.otherUser.bio}}</p>
+    </div>
+  </div>
+</div>
+  

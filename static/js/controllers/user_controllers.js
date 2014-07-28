@@ -169,7 +169,7 @@
 
   module.controller(
     'SignupEducatorController',
-    function($scope, Session, Messages, User, signUp, $location, $q, Search,
+    function($scope, Session, Messages, $location, $q, Search,
             Question, Answer) {
       $scope.isEducator = true;
       $scope.newSearch = new Search({
@@ -184,7 +184,7 @@
       });
       $scope.questions = [];
       // Signup logic common to Community Partners and Educators
-      commonSignupLogic($scope, Session, Messages, User, signUp, $location, $q,
+      commonSignupLogic($scope, Session, Messages, $location, $q,
                        Question, Answer);
     });
 

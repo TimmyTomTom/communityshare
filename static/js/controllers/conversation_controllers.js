@@ -19,6 +19,23 @@
   };
 
   module.controller(
+    'MessagesController',
+    function($scope, Session, Conversation, $location) {
+      $scope.Session = Session;
+      var user = Session.activeUser;
+      var conversationsPromise = Conversation.get_many({'user_id': user.id}, true);
+      conversationsPromise.then(
+        function(conversations) {
+          $scope.conversations = conversations;
+        },
+        function(errorMessage) {
+        });
+      $scope.showConversation = function(conversationId) {
+        $location.path('/conversation/' + conversationId);
+      };
+    });
+
+  module.controller(
     'ConversationController',
     function($scope, $q, $location, $timeout, $modal, Session,
              Conversation, Message, User, Share, makeDialog, conversation) {

@@ -77,14 +77,20 @@
 
   module.controller(
     'LogoutController',
-    function(Authenticator, Session) {
-      Authenticator.clean();
-      Session.activeUser = undefined;
+    function(Authenticator, Session, $location) {
+    });
+
+  module.controller(
+    'TermsController',
+    function($scope, $modalInstance) {
+      $scope.closeTerms = function() {
+        $modalInstance.close();        
+      };
     });
 
   module.controller(
     'DefaultController',
-    function($scope, user, $location, User, signUp, Messages) {
+    function($scope, user, $location, User, signUp, Messages, $modal) {
       if (user) {
         if (!(user.isCommunityPartner || user.isEducator)) {
           $location.path('signup/choice');
@@ -117,6 +123,12 @@
           $scope.pg = 'educator1';
           $scope.isEducator = true;
         }*/
+      };
+      $scope.showTerms = function() {
+        var m = $modal.open({
+          templateUrl: './static/templates/terms.html',
+          controller: 'TermsController'
+        });
       };
     });
 
@@ -151,8 +163,12 @@
 
   module.controller(
     'NavigationController',
-    function($scope, Session) {
+    function($scope, Session, Authenticator, $location) {
       $scope.Session = Session;
+      $scope.logout = function() {
+        Authenticator.clean();
+        $location.path('');
+      };
     });
   
   module.controller(

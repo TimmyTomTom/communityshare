@@ -9,6 +9,26 @@
     ]);
 
   module.controller(
+    'SharesController',
+    function(Session, $scope, Share) {
+      $scope.Session = Session;
+      if ($scope.Session.activeUser) {
+        var sharesPromise = Share.get_many({'user_id': Session.activeUser.id}, true);
+        $scope.errorMessage = '';
+        $scope.infoMessage = 'Loading shares...';
+        sharesPromise.then(
+          function(shares) {
+            $scope.errorMessage = '';
+            $scope.infoMessage = '';
+            $scope.shares = shares;
+          },
+          function(errorMessage) {
+            $scope.errorMessage = errorMessage;
+          });
+      }
+    });
+
+  module.controller(
     'ShareController',
     function(Session, $scope, $routeParams, Share) {
       $scope.Session = Session;

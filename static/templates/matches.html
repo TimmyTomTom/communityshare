@@ -1,0 +1,59 @@
+<div cs-forbidden ng-if="Session.activeUser === undefined">
+</div>
+
+<div ng-if="Session.activeUser !== undefined">
+
+  <div class="panel panel-default">
+    <div class="page-header">
+      <h2>Matches</h2>
+    </div>
+    <div class="row">
+      <div class="panel-body">
+        <div alert alert-info ng-show="infoMessage">{{infoMessage}}</div>
+        <div alert alert-danger ng-show="errorMessage">{{errorMessage}}</div>
+
+        <div ng-repeat="search in searches">
+          <h3>We searched for</h3>
+          <button ng-repeat="label in search.labels"
+                  class="btn btn-small">
+            {{label}}
+          </button>
+          <div ng-show="!search.show">
+            <a ng-click="getMatches(search)" class="clickable">Show Matches</a>
+          </div>
+          <div ng-show="search.show">
+            <div alert alert-info ng-show="search.infoMessage">
+              {{search.infoMessage}}</div>
+            <div alert alert-danger ng-show="search.errorMessage">
+              {{search.errorMessage}}</div>
+
+            <div ng-show="search.matches.length == 0">
+              No matches found
+            </div>
+
+            <div ng-repeat="match in search.matches">
+              <div class="col-md-3 ">
+                <image ng-src="{{match.searcher_user.picture_url}}" class="img-responsive img-circle" />
+                <button class="btn btn-primary search-btn btn-default btn-block"
+                        ng-click="startConversation(match.searcher_user_id, match.id)">
+                  Message
+                </button>
+                <button class="btn fav-btn btn-xs">
+                  <span class="glyphicon glyphicon-heart fav-heart"></span> Add to Favorites
+                </button>
+              </div>
+          
+              <div class="col-md-9">
+                <a ng-href="#/user/{{match.searcher_user_id}}"><h4>{{match.searcher_user.name}}</h4></a>
+                <p class="show-linebreaks">{{match.searcher_user.bio}}</p>
+                <h5>{{ {'partner': 'They offer', 'educator': 'Looking For'}[search.searcher_role] }}</h5>
+                <div ng-repeat="label in match.labels" ng-class="{true: 'labelbox-selected', false: 'labelbox btn-xs'}[match.matchingLabels[label]]" class="labelbox">{{label}}</div>
+              </div>
+              <div class="clearfix"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

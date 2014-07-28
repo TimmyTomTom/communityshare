@@ -1,10 +1,11 @@
 <div>
-
   <div ng-repeat="ia in user.institution_associations" cs-institution-association-edit
        institution-association="ia", index="{{$index+1}}"
        institutions="options.institutions"
        disabled="noInstitutions"
-       institution-types="options.institutionTypes">
+       institution-types="options.institutionTypes"
+       roles="options.roles"
+       >
   </div>
   
   <label class="checkbox-inline"

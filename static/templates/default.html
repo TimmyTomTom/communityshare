@@ -1,13 +1,29 @@
 <!-- This is the main splash page -->
-<div class="row" ng-show="pg === 'default'">
-  <div class="col-sm-6">
-    <h1>Share with Communityshare</h1>
-    <h3>This is the value proposition. Join today.</h3>
+
+<div id="bg">
+  <!-- FIXME: Should point to a locally served file. -->
+<img src="http://i.imgur.com/4dTI4xz.jpg" id="bg" alt="">
+</div>
+
+<div id="bg-image">
+
+
+
+<div class="centered-home">
+
+<div class="row-fluid">
+
+
+  <div class="col-xs-12 col-md-7 text-center value-prop">
+    <h1>Reaching Out</h1>
+    <h2>Working together to benefit the children in </br> your community</h2>
   </div>
-  
-  <div class="col-sm-6 well">
+
+  <div class="col-xs-12 col-md-4 well pull-right signup-div">
+
+    <h2 class="text-center">Join Community Share</h2>
     <form role="form" name="signUpForm">
-      
+
       <div class="form-group">
         <input ng-model="newUser.firstName"
                required
@@ -15,7 +31,7 @@
                name="firstName"
                id="firstName"
                placeholder="First Name"
-               class="form-control"/>
+               class="form-control input-lg signup-form"/>
         <p ng-show="signUpForm.firstName.$invalid && !signUpForm.firstName.$pristine"
            class="help-block">
           First Name is required.
@@ -29,7 +45,7 @@
                name="lastName"
                id="lastName"
                placeholder="Last Name"
-               class="form-control"/>
+               class="form-control input-lg signup-form"/>
         <p ng-show="signUpForm.lastName.$invalid && !signUpForm.lastName.$pristine"
            class="help-block">
           Last Name is required.
@@ -42,7 +58,7 @@
                name="email"
                id="email"
                placeholder="Email"
-               class="form-control"
+               class="form-control input-lg signup-form"
                type="email"/>
         <p ng-show="signUpForm.email.$invalid && !signUpForm.email.$pristine" class="help-block">
           Please enter a valid email.
@@ -54,7 +70,7 @@
                required
                name="password"
                id="password"
-               class="form-control"
+               class="form-control input-lg signup-form"
                placeholder="Password"
                cs-parser-hook="passwordConnection"
                ng-minlength="8"
@@ -74,7 +90,7 @@
         <input ng-model="repeat_password"
                name="repeat_password"
                id="repeat_password"
-               class="form-control"
+               class="form-control input-lg signup-form"
                cs-match="passwordConnection"
                methods="passwordMethods"
                placeholder="Confirm Password"
@@ -83,28 +99,38 @@
           Passwords do not match.
         </p>
       </div>
-      
+
+      <div class="col-xs-12 text-center">
+        <h2>Sign Up As An</h2>
+      </div>
+
+<div class="col-xs-6">
+  <label class="radio inline">
+    <input type="radio" name="inLineRadioOptions"
+           ng-model="user_type"
+           class="signupRadio" value="educator">
+    <h3>Educator</h3>
+  </label>
+</div>
+
+
       <div class="col-xs-6">
         <label class="radio inline">
           <input type="radio" name="inLineRadioOptions"
                  ng-model="user_type"
                  class="signupRadio" value="communityPartner">
-          Community Partner
+          <h3>Community Partner</h3>
         </label>
       </div>
-      <div class="col-xs-6">
-        <label class="radio inline">
-          <input type="radio" name="inLineRadioOptions"
-                 ng-model="user_type"
-                 class="signupRadio" value="educator">
-          Educator
-        </label>
-      </div>
-      
-      <p> By clicking Sign Up, you agree to our <a href="#">Terms of Service</a>.</p>
 
+
+<div class="col-xs-12">
+
+      <p> By clicking Sign Up, you agree to our <a ng-click="showTerms()" class="clickable">
+          Terms of Service</a>.</p>
+</div>
       <div alert alert-error ng-show="errorMessage">{{errorMessage}}</div>
-      
+
       <div class="col-xs-12 text-center">
         <button type="submit" class="btn btn-primary text-center"
                 ng-disabled="signUpForm.$invalid || (user_type === undefined)"
@@ -115,15 +141,16 @@
     </form>
   </div>
 </div>
+</div> <!--BG - Image-->
 
 <!-- This is the first page of the community share signup process -->
 <div class="row" ng-show="pg === 'partner1'">
-  
+
   <div class="col-sm-2 col-md-3">
     <!--       <img style="img-responsive" src="http://i.imgur.com/j9NMHah.png">
                <img src="http://i.imgur.com/j9NMHah.png"> -->
   </div>
-  
+
   <div class="col-sm-10 col-md-9">
     <div class="panel panel-default">
       <div class="gradient-header">
@@ -205,7 +232,7 @@
     <!--       <img style="img-responsive" src="http://i.imgur.com/j9NMHah.png">
                <img src="http://i.imgur.com/j9NMHah.png"> -->
   </div>
-  
+
   <div class="col-sm-10 col-md-9">
     <div class="panel panel-default">
       <div class="gradient-header">
@@ -217,7 +244,7 @@
           <img src="http://imgur.com/rQ7NKxD.png" class="img-responsive img-circle"></img>
           <button class="btn btn-primary signup-btn">Upload</button>
         </div>
-        
+
         <div class="col-sm-9">
           <h3>About Me</h3>
           <p class="text-muted">
@@ -231,16 +258,16 @@
             <input class="form-control org-input required" placeholder="Twitter Profile URL"></input>
             <input class="form-control org-input required" placeholder="LinkedIn Profile URL"></input>
           </div>
-          
+
           <label class="checkbox-inline">
             <input type="checkbox" value="1"> CommunityShare invites you to stay informed about our progress in connecting educators and community members and adding new features to the CommunityShare site through periodic email updates. Click here to opt-out now or at any time by visiting your profile. You will still receive emails in relation to your correspondence with community partners/educators.
-            
+
           </label>
-          
+
         </div>
       </div>
     </div>
-    
+
     <div class="row">
       <div class="signup-bottom">
         <div class="pull-right">
@@ -252,4 +279,5 @@
       </div>
     </div>
   </div>
-</div>
+</div> <!--Div Centered-->
+</div> <!--Row Fluid -->

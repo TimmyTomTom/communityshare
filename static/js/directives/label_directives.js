@@ -32,6 +32,15 @@
      });
 
   var LabelsController = function($scope, getAllLabels) {
+    $scope.labelClasses = {
+      'gradeLevels': 'light-yellow-button',
+      'educatorSubjectAreas': 'light-green-button',
+      'engagementLevels': 'light-blue-button'
+    }
+    $scope.labelInfos = [];
+    for (var i=0; i<$scope.labelTitles.length; i++) {
+      $scope.labelInfos.push([$scope.labelTitles[i], $scope.labelTypes[i]]);
+    }
     $scope.newLabel = {
       name: ''
     };
@@ -65,27 +74,17 @@
   };
 
   module.directive(
-    'csEducatorLabels',
-     function(Session) {
-       return {
-         scope: {
-           search: '=',
-         },
-         templateUrl: './static/templates/educator_labels.html',
-         controller: LabelsController
-       };
-     });
+    'csLabels',
+    function(Session) {
+      return {
+        scope: {
+          search: '=',
+          labelTitles: '=',
+          labelTypes: '='
+        },
+        templateUrl: './static/templates/labels.html',
+        controller: LabelsController,
+      };
+    });
 
-  module.directive(
-    'csCommunityPartnerLabels',
-     function(Session) {
-       return {
-         scope: {
-           search: '=',
-         },
-         templateUrl: './static/templates/community_partner_labels.html',
-         controller: LabelsController
-       };
-     });
-  
 })();

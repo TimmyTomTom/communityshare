@@ -17,7 +17,7 @@
     ]);
   
   app.config(function($routeProvider) {
-
+    
     $routeProvider.when('/', {
       templateUrl: './static/templates/default.html',
       controller: 'DefaultController',
@@ -37,18 +37,13 @@
       controller: 'LoginController'
     });
 
-    $routeProvider.when('/logout', {
-      templateUrl: './static/templates/logout.html',
-      controller: 'LogoutController'
-    });
-
     $routeProvider.when('/signup/communitypartner', {
-      templateUrl: './static/templates/partner_signup_1.html',
+      templateUrl: './static/templates/signup_community_partner.html',
       controller: 'SignupCommunityPartnerController'
     });
 
     $routeProvider.when('/signup/personal', {
-      templateUrl: './static/templates/partner_signup_2.html',
+      templateUrl: './static/templates/signup_personal.html',
       controller: 'SignupPersonalController'
     });
 
@@ -102,6 +97,26 @@
       }
     });
 
+    $routeProvider.when('/messages', {
+      templateUrl: './static/templates/messages.html',
+      controller: 'MessagesController',
+      resolve: {
+        activeUser: function(activeUserLoader) {
+          return activeUserLoader();
+        }
+      }
+    });
+
+    $routeProvider.when('/shares', {
+      templateUrl: './static/templates/shares.html',
+      controller: 'SharesController',
+      resolve: {
+        activeUser: function(activeUserLoader) {
+          return activeUserLoader();
+        }
+      }
+    });
+
     $routeProvider.when('/user/:userId', {
       templateUrl: './static/templates/user_view.html',
       controller: 'UserController',
@@ -122,6 +137,16 @@
       }
     });
 
+    $routeProvider.when('/matches', {
+      templateUrl: './static/templates/matches.html',
+      controller: 'MatchesController',
+      resolve: {
+        activeUser: function(activeUserLoader) {
+          return activeUserLoader();
+        }
+      }
+    });
+
     $routeProvider.when('/search/:searchId/results', {
       templateUrl: './static/templates/search_results.html',
       controller: 'SearchResultsController',
@@ -133,7 +158,7 @@
     });
 
     $routeProvider.when('/search', {
-      templateUrl: './static/templates/search_edit.html',
+      templateUrl: './static/templates/search.html',
       controller: 'SearchEditController',
       resolve: {
         activeUser: function(activeUserLoader) {

@@ -33,9 +33,25 @@
                'Corporation', 'Freelancer', 'Nonprofit', 'Academic',
                'Government', 'Other'
                ];
+             $scope.options.roles = [];
            } else if ($scope.isEducator) {
              $scope.options.institutionTypes = [
-               'University', 'Public School', 'Charter School', 'Private School'];
+               'Public District School',
+               'Public Charter',
+               'Private School',
+               'Home School',
+               'Higher Education',
+               'Nonprofit',
+               'After School Program',
+               'Other',
+             ];
+            $scope.options.roles = [
+              'Classroom teacher',
+              'Curriculum Coordinator',
+              'Administator',
+              'Parent',
+              'Other',
+            ];
            }
            if ($scope.user.institution_associations.length === 0) {
              $scope.user.institution_associations.push({});
@@ -56,6 +72,7 @@
           institutionAssociation: '=',
           institutions: '=',
           institutionTypes: '=',
+          roles: '=',
           disabled: '=',
           methods: '=',
           index: '@'

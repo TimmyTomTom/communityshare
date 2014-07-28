@@ -1,0 +1,17 @@
+<h3>Search</h3>
+
+<div ng-if="Session.activeUser.is_educator" cs-labels search="search"
+     label-titles="['What grade levels would the community partner be working with?', 'In which ways would they be involved?', 'What ares of expertise are you looking for(click all that apply)']"
+     label-types="['gradeLevels', 'engagementLevels', 'communityPartnerSubjectAreas']"
+     ></div>
+
+<div ng-if="!Session.activeUser.is_educator" cs-labels search="search"
+     label-titles="['Which grade levels are you interested in working with?', 'In what ways are you interested in volunteering (click all that apply)', 'In which areas do you have expertise?']"
+     label-types="['gradeLevels', 'engagementLevels', 'educatorSubjectAreas']"           
+     ></div>
+
+<button class="btn btn-primary"
+        ng-disabled="properties.educatorSearchSettingsForm.$invalid"
+        ng-click="saveSettings()">
+  Search
+</button>

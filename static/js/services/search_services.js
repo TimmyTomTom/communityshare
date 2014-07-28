@@ -34,14 +34,8 @@
 
   module.factory(
     'Search',
-    function(itemFactory, $q, $http, makeBaseLabels, sortLabels, UserBase) {
-      var baseLabels = makeBaseLabels();
-      var labellists = {
-        gradeLevels: baseLabels.all.gradeLevels,
-        subjectAreas: baseLabels.all.subjectAreas.STEM.concat(
-          baseLabels.all.subjectAreas.Arts, baseLabels.all.subjectAreas.Custom),
-        engagementLevels: baseLabels.all.engagementLevels
-      };
+    function(itemFactory, $q, $http, makeBaseLabels, UserBase) {
+      var labellists = makeBaseLabels();
       var labelMapping = {};
       for (var key in labellists) {
         for (var i=0; i<labellists[key].length; i++) {
@@ -81,12 +75,15 @@
 
       var Search = itemFactory('search');
       Search.prototype.initialize = function() {
-        if (this.labels) {
-          sortLabels(this.labels);
-        }
         if(this.searcher_user) {
           this.searcher_user = UserBase.make(this.searcher_user);
         }
+      };
+      Search.prototype.updateFromData = function(data) {
+        for (var key in data) {
+          this[key] = data[key];
+        }
+        this.created = new Date(this.created);
       };
       Search.getResults = function(searchId) {
         var deferred = $q.defer();
@@ -123,11 +120,10 @@
       };
       Search.prototype.makeLabelDisplay = function() {
         this.displayLabelsAll = makeBaseLabels()['suggested'];
-        this.displayLabelsActive = {
-          gradeLevels: [],
-          subjectAreas: [],
-          engagementLevels: []
-        };
+        this.displayLabelsActive = {};
+        for (key in this.displayLabelsAll) {
+          this.displayLabelsActive[key] = [];
+        }
         this.activeLabels = {};
         if (this.labels) {
           for (var i=0; i<this.labels.length; i++) {
@@ -135,8 +131,8 @@
             this.activeLabels[label] = true;
             var key = labelMapping[label];
             if (key === undefined) {
-              this.displayLabelsAll.subjectAreas.Custom.push(label);
-              key = 'subjectAreas'
+              key = 'customSubjectAreas';
+              this.displayLabelsAll[key].push(label);
             }
             this.displayLabelsActive[key].push(label);
           }
@@ -165,34 +161,6 @@
     });
 
   module.factory(
-    'sortLabels',
-    function(makeBaseLabels) {
-      var baseLabels = makeBaseLabels()['all'];
-      var sortLabels = function(labels) {
-        var orderedLabels = baseLabels.gradeLevels.concat(
-          baseLabels.subjectAreas.STEM, baseLabels.subjectAreas.Arts,
-          baseLabels.subjectAreas.Custom, baseLabels.engagementLevels);
-        var labelPositions = {};
-        for (var i=0; i<orderedLabels.length; i++) {
-          labelPositions[orderedLabels[i]] = i;
-        }
-        var getPosition = function(label) {
-          var position = labelPositions[label];
-          if (position === undefined) {
-            position = orderedLabels.length;
-          }
-          return position;
-        }
-        var sortFn = function(labelA, labelB) {
-          var result = getPosition(labelA) - getPosition(labelB);
-          return result;
-        }
-        labels.sort(sortFn);
-      }
-      return sortLabels;
-    });
-
-  module.factory(
     'makeBaseLabels',
     function() {
       var makeBaseLabels = function() {
@@ -202,21 +170,24 @@
             suggested: ['K-5', '6-8', '9-12', 'College', 'Adult'] ,
             other: ['K-3', '4-5', '6-8', '9-12', 'Preschool']
           },
-          // Subject area
-          subjectAreas: {
-            STEM: {
-              suggested: ['Science', 'Technology', 'Engineering', 'Math'],
-              other: []
-            },
-            Arts: {
-              suggested: ['Visual Arts', 'Digital Media', 'Film & Photography', 'Literature',
-                          'Performing Arts'],
-              other: []
-            },
-            Custom: {
-              suggested: [],
-              other: []
-            }
+          communityPartnerSubjectAreas: {
+            suggested: [
+              'Science', 'Technology', 'Engineering', 'Match',
+              'Visual Arts', 'Digital Media', 'Film & Photography', 'Literature',
+              'Performing Arts'
+            ],
+            other: []
+          },
+          educatorSubjectAreas: {
+            suggested: [
+              'Social Studies', 'English/Language Arts', 'Foreign Languages', 'PE/Health/Sports',
+              'Mathematics', 'Goverment', 'Science',
+            ],
+            other: []
+          },
+          customSubjectAreas: {
+            suggested: [],
+            other: []
           },
           // Level of Engagement
           engagementLevels: {
@@ -230,24 +201,12 @@
         };
 
         var suggestedLabels = {};
-        suggestedLabels.gradeLevels = labels.gradeLevels.suggested;
-        suggestedLabels.subjectAreas = {};
-        suggestedLabels.subjectAreas.STEM = labels.subjectAreas.STEM.suggested;
-        suggestedLabels.subjectAreas.Arts = labels.subjectAreas.Arts.suggested;
-        suggestedLabels.subjectAreas.Custom = labels.subjectAreas.Custom.suggested;
-        suggestedLabels.engagementLevels = labels.engagementLevels.suggested;
-
         var allLabels = {};
-        allLabels.gradeLevels = labels.gradeLevels.suggested.concat(labels.gradeLevels.other);
-        allLabels.subjectAreas = {};
-        allLabels.subjectAreas.STEM = labels.subjectAreas.STEM.suggested.concat(
-          labels.subjectAreas.STEM.other);
-        allLabels.subjectAreas.Arts = labels.subjectAreas.Arts.suggested.concat(
-          labels.subjectAreas.Arts.other);
-        allLabels.subjectAreas.Custom = labels.subjectAreas.Custom.suggested.concat(
-          labels.subjectAreas.Custom.other);
-        allLabels.engagementLevels = labels.engagementLevels.suggested.concat(
-          labels.engagementLevels.other);
+        for (var labelType in labels) {
+          suggestedLabels[labelType] = labels[labelType].suggested;
+          allLabels[labelType] = labels[labelType].suggested.concat(
+            labels[labelType].other);
+        }
         
         return {'suggested': suggestedLabels,
                 'all': allLabels}

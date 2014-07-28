@@ -1,92 +1,51 @@
 <div cs-forbidden ng-if="(conversation === undefined) || (Session.activeUser === undefined)">
 </div>
 
-<!-- Sidebar Template -->
+<!-- Conversation Code  -->
+<div ng-if="(conversation !== undefined) && (Session.activeUser !== undefined)">
+  <!-- Conversation Area -->
+  <div class="panel panel-default">
 
+    <div class="gradient-header">
+      <h2>Message:  {{conversation.otherUser.name}} </h2>
+    </div>
 
-
-<div class="row">
-
-  <div class="col-sm-2 col-md-3">
-
-
-<div id="side-bar">
-  <img src="http://lorempixel.com/200/200/people/" class="img-responsive img-circle centered">
-  <ul class="side-nav" id="side-nav-items">
-    <li class="side-nav-links"><a ng-href="/#/search/{{search.id}}/results">Matches</a>
-    </li>
-    <li class="side-nav-links"><a href="#">Search</a>
-    </li>
-    <li class="side-nav-links"><a href="#">Messages</a>
-    </li>
-    <li class="side-nav-links"><a href="#">Shares</a>
-    </li>
-
-  </ul>
-
-
-</div>
-
-</div>
-
-
-
-
-
-
-
-
-
-
-  <!-- Conversation Code  -->
-
-  <div class="col-sm-10 col-md-9">
-
-    <div ng-if="(conversation !== undefined) && (Session.activeUser !== undefined)">
-
-      <!-- Conversation Area -->
-
-      <div class="panel panel-default">
-        <div class="gradient-header">
-          <h2>Message:  {{conversation.otherUser.name}} </h2>
-        </div>
-        <div class="panel-body">
-
-<!--           <div ng-show="conversation.messages.length >=2" class="alert alert-warning">
-            Don't forget to Create a Share.
-          </div> -->
-
-
-          <div id="chat-body">
-            <div ng-repeat="message in conversation.messages" class="conversation-block">
-
-              <div class="chat-unit">
-                <div class="row">
-                  <div class="col-lg-2">
-                    <div class="message-profile-img">
-                      <img src="http://lorempixel.com/75/75/people/" class=" img-circle">
-                    </div>
-                  </div>
-                  <div class="col-lg-10">
-                    <div class="chat-message">
-                    <!--                 <div class="conversation-sender"> -->
-                    <h4>{{message.sender_user.name}}</h4>
-                    <!--                 </div> -->
-                    <div class="conversation-message show-linebreaks" ng-class="message.sender_user_id">{{message.content}}</div>
-                  </div>
+    <div class="panel-body">
+      
+      <div ng-show="conversation.messages.length >=2" class="alert alert-warning">
+        Don't forget to Create a Share.
+      </div> 
+      
+      <div id="chat-body">
+        <div ng-repeat="message in conversation.messages" class="conversation-block">
+          <div class="chat-unit">
+            <div class="row">
+              <div class="col-lg-2">
+                <div class="message-profile-img">
+                  <img src="http://lorempixel.com/75/75/people/" class=" img-circle">
+                </div>
+              </div>
+              <div class="col-lg-10">
+                <div class="chat-message">
+                  <!--                 <div class="conversation-sender"> -->
+                  <h4>{{message.sender_user.name}}</h4>
+                  <!--                 </div> -->
+                  <div class="conversation-message show-linebreaks" ng-class="message.sender_user_id">
+                    {{message.content}}
                   </div>
                 </div>
               </div>
-
+            </div>
           </div>
-          </div>
+        </div>
+      </div>
 
-          <form novalidate login-with-auto-fill action="" role="form" name="newConversationForm" class="form-horizontal" ng-if="conversation.otherUser">
-
-            <div class="form-group">
-              <div class="chat-box">
-                <textarea ng-model="newMessage.content" required name="content" id="content" class="form-control" ng-class="Session.activeUser.id" type="text">
-                </textarea>
+      <form novalidate login-with-auto-fill action="" role="form" name="newConversationForm" class="form-horizontal" ng-if="conversation.otherUser">
+        
+        <div class="form-group">
+          <div class="chat-box">
+            <textarea ng-model="newMessage.content" required name="content" id="content" class="form-control" ng-class="Session.activeUser.id" type="text">
+            </textarea>
                 <p ng-show="newConversationForm.content.$invalid && !newConversationForm.content.$pristine" class="help-block">
                   A message is required.
                 </p>

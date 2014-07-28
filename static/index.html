@@ -15,13 +15,9 @@
     <link rel="stylesheet"
           href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css"
           type="text/css" />
-
-
   </head>
 
   <body>
-
-
 
     <!-- Static navbar -->
     <div class="navbar navbar-default navbar-fixed-top" role="navigation"
@@ -39,12 +35,13 @@
               <span class="icon-bar"></span>
           </button>
           <div ng-switch on="Session.activeUser !== undefined">
-            <a class="navbar-brand" href="#/" ng-switch-when="false">
-              Community Share
+            <a class="navbar-brand brand" href="#/" ng-switch-when="false">
+              <!-- FIXME: Should point to a locally served file. -->
+              <img src="http://imgur.com/ryZeICk.png"  id="logo-id" />
             </a>
             <a class="navbar-brand" href="#/home" ng-switch-when="true">
               <!-- FIXME: Should point to a locally served file. -->
-              <img src="http://i.imgur.com/iIE2wPf.png"  id="logo-id" />
+              <img src="http://imgur.com/ryZeICk.png"  id="logo-id" />
             </a>
           </div>
         </div>
@@ -58,31 +55,51 @@
             <li ng-show="Session.activeUser">
               <a href="#/settings">Settings</a></li>
             <li ng-show="Session.activeUser">
-              <a href="#/logout">Logout</a></li>
+              <a ng-click="logout()" class="clickable">Logout</a></li>
             <li ng-show="Session.activeUser == undefined">
               <a href="#login" ng-show="!Session.activeUser">Login</a></li>
           </ul>
-          
+
         </div><!--/.nav-collapse -->
       </div><!--/.container-fluid -->
     </div>
-    
-    <div class="container">
+
       <div class="message-container" ng-controller="MessageController">
-        <div alert>Hello world</div>
         <div alert ng-repeat="alert in messages.messages"
              class="animated-alert"
              type="{{ "{{" }} alert.type {{ "}}" }}"
              close="messages.removeMessage(alert)">
           {{ "{{" }}alert.text{{ "}}" }}</div>
       </div>
-      
-      <!-- Main component for a primary marketing message or call to action -->
-      <div class="ng-view container-fluid">
+
+      <!-- Side menu stuff -->
+      <div class="centered-home">
+      <div class="container-fluid">
+        <div class="row">
+
+          <div ng-controller="NavigationController">
+            <div ng-show="Session.activeUser" class="col-sm-2 col-md-3">
+              <div id="side-bar">
+                <img src="http://lorempixel.com/200/200/people/" class="img-responsive img-circle centered">
+                <ul class="side-nav" id="side-nav-items">
+                  <li class="side-nav-links"><a href="/#/search">Search</a>
+                  </li>
+                  <li class="side-nav-links"><a href="/#/messages">Messages</a>
+                  </li>
+                  <li class="side-nav-links"><a href="/#/shares">Shares</a>
+                  </li>
+                  <li class="side-nav-links"><a href="/#/matches">Matches</a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <!-- Main component for a primary marketing message or call to action -->
+          <div class="ng-view col-sm-10 col-md-9 col-lg-12 ">
+          </div>
+        </div>
       </div>
-      
-    </div> <!-- /container -->
-    
+    </div> <!--centered -->
     <div class="footer">
       <div class="navbar navbar-default">
         <div class="text-muted text-right">

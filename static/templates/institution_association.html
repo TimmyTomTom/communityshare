@@ -6,19 +6,30 @@
        typeahead="i.name for i in institutions | filter:$viewValue | limitTo: 100"
        ng-disabled="disabled"
        type="text"/>
-<input ng-model="institutionAssociation.role"
+<input ng-if="roles.length === 0"
+       ng-model="institutionAssociation.role"
        name="role{{index}}"
        id="role{{index}}"
        class="form-control org-input"
        placeholder="Position/Title"
        ng-disabled="disabled"
        type="text"/>
+<select ng-if="roles.length > 0"
+        ng-model="institutionAssociation.role"
+        name="role{{index}}"
+        id="role{{index}}"
+        class="form-control"
+        ng-options="role for role in roles"
+        ng-disabled="disabled"
+        >
+  <option value="" selected>Role</option>
+</select>
 <select ng-model="institutionAssociation.institution.institution_type"
         name="institution_type{{index}}"
         id="institution_type{{index}}"
         class="form-control"
         ng-options="typ for typ in institutionTypes | filter:$viewValue | limitTo: 100"
-       ng-disabled="disabled"
+        ng-disabled="disabled"
         >
   <option value="" selected>Type of Organization</option>
 </select>
